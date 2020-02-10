@@ -6,4 +6,8 @@
 
     <color name="colorPageGray">#EFEFF4</color>
     <color name="colorLine">#D5D4D9</color>
+
+    <color name="colorTextTitle">#000000</color>
+    <color name="colorTextContent">#8E8E93</color>
+    <color name="colorTextHint">#BCBBBF</color>
 </resources>

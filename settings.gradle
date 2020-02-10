@@ -1,2 +1,2 @@
-include ':app', ':core', ':WanAndroid'
+include ':app', ':core', ':WanAndroid',"tabLayoutLib"
 rootProject.name='AndroidNotebook'
