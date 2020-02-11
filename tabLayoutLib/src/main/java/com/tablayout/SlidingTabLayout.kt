@@ -746,7 +746,7 @@ class SlidingTabLayout @JvmOverloads constructor(
     }
 
     private var mListener: OnTabSelectListener? = null
-    fun setOnTabSelectListener(listener: OnTabSelectListener?) {
+    fun setOnTabSelectListener(listener: OnTabSelectListener) {
         mListener = listener
     }
 

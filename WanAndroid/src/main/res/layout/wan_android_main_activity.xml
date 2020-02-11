@@ -8,14 +8,14 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/tabLayout"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.tablayout.CommonTabLayout
-        android:id="@+id/tabLayout"
+        android:id="@+id/commonTabLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@android:color/white"

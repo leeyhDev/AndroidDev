@@ -1,6 +1,7 @@
 package com.leeyh.model.api
 
 import com.leeyh.model.bean.ArticleList
+import com.leeyh.model.bean.System
 import com.leeyh.model.bean.WanData
 import com.leeyh.model.bean.WxArticleChapter
 import retrofit2.http.GET
@@ -21,12 +22,10 @@ interface WanService {
     @GET("wxarticle/list/{id}/{page}/json")
     suspend fun getWxArticleList(@Path("id") id: Int, @Path("page") page: Int): WanData<ArticleList>
 
-    /* @GET("/banner/json")
-     suspend fun getBanner(): WanBaseData<List<Banner>>
+    @GET("/tree/json")
+    suspend fun getSystem(): WanData<List<System>>
 
-     @GET("/tree/json")
-     suspend fun getSystemType(): WanBaseData<List<SystemParent>>
-
+    /*
      @GET("/article/list/{page}/json")
      suspend fun getSystemTypeDetail(@Path("page") page: Int, @Query("cid") cid: Int): WanBaseData<ArticleList>
 

@@ -21,7 +21,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.tablayout.listener.CustomTabEntity
+import com.tablayout.bean.CustomTabEntity
 import com.tablayout.listener.OnTabSelectListener
 import com.tablayout.utils.FragmentChangeManager
 import com.tablayout.utils.UnreadMsgUtils.show
@@ -151,8 +151,8 @@ class CommonTabLayout @JvmOverloads constructor(
         ta.recycle()
     }
 
-    fun setTabData(tabEntitys: ArrayList<CustomTabEntity>?) {
-        check(!(tabEntitys == null || tabEntitys.size == 0)) { "TabEntitys can not be NULL or EMPTY !" }
+    fun setTabData(tabEntitys: ArrayList<CustomTabEntity>) {
+        check(tabEntitys.size != 0) { "TabEntitys can not be NULL or EMPTY !" }
         mTabEntitys.clear()
         mTabEntitys.addAll(tabEntitys)
         notifyDataSetChanged()
@@ -160,7 +160,7 @@ class CommonTabLayout @JvmOverloads constructor(
 
     /** 关联数据支持同时切换fragments  */
     fun setTabData(
-        tabEntitys: ArrayList<CustomTabEntity>?,
+        tabEntitys: ArrayList<CustomTabEntity>,
         fa: FragmentActivity,
         containerViewId: Int,
         fragments: ArrayList<Fragment>
@@ -175,14 +175,19 @@ class CommonTabLayout @JvmOverloads constructor(
         tabCount = mTabEntitys.size
         var tabView: View
         for (i in 0 until tabCount) {
-            tabView = if (mIconGravity == Gravity.LEFT) {
-                View.inflate(mContext, R.layout.layout_tab_left, null)
-            } else if (mIconGravity == Gravity.RIGHT) {
-                View.inflate(mContext, R.layout.layout_tab_right, null)
-            } else if (mIconGravity == Gravity.BOTTOM) {
-                View.inflate(mContext, R.layout.layout_tab_bottom, null)
-            } else {
-                View.inflate(mContext, R.layout.layout_tab_top, null)
+            tabView = when (mIconGravity) {
+                Gravity.LEFT -> {
+                    View.inflate(mContext, R.layout.layout_tab_left, null)
+                }
+                Gravity.RIGHT -> {
+                    View.inflate(mContext, R.layout.layout_tab_right, null)
+                }
+                Gravity.BOTTOM -> {
+                    View.inflate(mContext, R.layout.layout_tab_bottom, null)
+                }
+                else -> {
+                    View.inflate(mContext, R.layout.layout_tab_top, null)
+                }
             }
             tabView.tag = i
             addTab(i, tabView)
@@ -757,7 +762,7 @@ class CommonTabLayout @JvmOverloads constructor(
     }
 
     private var mListener: OnTabSelectListener? = null
-    fun setOnTabSelectListener(listener: OnTabSelectListener?) {
+    fun setOnTabSelectListener(listener: OnTabSelectListener) {
         mListener = listener
     }
 

@@ -38,6 +38,7 @@ dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     api project(path: ':core')
     api project(path: ':tabLayoutLib')
+    api project(path: ':flowLayoutLib')
 
     implementation 'androidx.navigation:navigation-fragment:2.2.1'
     implementation 'androidx.navigation:navigation-ui:2.2.1'
