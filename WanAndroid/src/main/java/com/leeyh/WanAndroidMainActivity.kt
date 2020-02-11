@@ -17,7 +17,7 @@ class WanAndroidMainActivity : AppCompatActivity() {
         setContentView(R.layout.wan_android_main_activity)
         val tabEntities = arrayListOf(
             CustomTabEntity("首页", R.mipmap.home, R.mipmap.home_pre),
-            CustomTabEntity("笔记", R.mipmap.note, R.mipmap.note_pre)
+            CustomTabEntity("体系", R.mipmap.system, R.mipmap.system_pre)
         )
         val fragments = arrayOf(ArticleFragment(), SystemFragment())
         commonTabLayout.setTabData(tabEntities)
