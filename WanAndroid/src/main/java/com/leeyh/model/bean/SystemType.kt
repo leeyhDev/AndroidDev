@@ -1,7 +1,7 @@
 package com.leeyh.model.bean
 import com.google.gson.annotations.SerializedName
 
-data class System(
+data class SystemType(
     @SerializedName("children")
     val children: List<Children>,
     @SerializedName("courseId")

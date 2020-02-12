@@ -3,14 +3,14 @@ package com.leeyh.ui.system
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.LogUtils
 import com.core.base.BaseViewModel
-import com.leeyh.model.bean.System
+import com.leeyh.model.bean.SystemType
 import com.leeyh.model.repository.SystemRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class SystemViewModel : BaseViewModel() {
     private val repository by lazy { SystemRepository() }
-    val systemList: MutableLiveData<List<System>> = MutableLiveData()
+    val systemList: MutableLiveData<List<SystemType>> = MutableLiveData()
 
     fun getSystemList() {
         launch {

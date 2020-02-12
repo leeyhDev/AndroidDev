@@ -7,7 +7,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 abstract class BaseVMActivity<VM : BaseViewModel> : AppCompatActivity(), LifecycleObserver {
-    lateinit var mViewModel: VM
+    lateinit var viewModel: VM
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,19 +25,19 @@ abstract class BaseVMActivity<VM : BaseViewModel> : AppCompatActivity(), Lifecyc
     open fun providerVMClass(): Class<VM>? = null
     private fun initVM() {
         providerVMClass()?.let {
-            mViewModel = ViewModelProvider(this).get(it)
-            mViewModel.let(lifecycle::addObserver)
+            viewModel = ViewModelProvider(this).get(it)
+            viewModel.let(lifecycle::addObserver)
         }
     }
 
     open fun startObserve() {
-        mViewModel.mException.observe(this, Observer { it?.let { onError(it) } })
+        viewModel.mException.observe(this, Observer { it?.let { onError(it) } })
     }
 
     open fun onError(e: Throwable) {}
 
     override fun onDestroy() {
-        mViewModel.let {
+        viewModel.let {
             lifecycle.removeObserver(it)
         }
         super.onDestroy()

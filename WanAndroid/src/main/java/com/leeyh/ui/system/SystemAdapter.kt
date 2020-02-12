@@ -11,21 +11,21 @@ import com.flowlayout.FlowLayout
 import com.flowlayout.TagAdapter
 import com.flowlayout.TagFlowLayout
 import com.leeyh.R
-import com.leeyh.model.bean.System
+import com.leeyh.model.bean.SystemType
 
-class SystemAdapter(layoutId: Int, data: List<System>?) : BaseQuickAdapter<System, BaseViewHolder>(layoutId), LoadMoreModule {
-    override fun convert(helper: BaseViewHolder, item: System?) {
+class SystemAdapter(layoutId: Int, data: List<SystemType>?) : BaseQuickAdapter<SystemType, BaseViewHolder>(layoutId), LoadMoreModule {
+    override fun convert(helper: BaseViewHolder, item: SystemType?) {
         item?.let {
             helper.setText(R.id.nameTv, it.name)
-            val tagFlowLayout = helper.getView<TagFlowLayout>(R.id.tagFlowLayout)
+            val tagFlowLayout = helper.getView<TagFlowLayout<SystemType.Children>>(R.id.tagFlowLayout)
             val childNames = ArrayList<String>()
             it.children.forEach { child ->
                 childNames.add(child.name)
             }
-            tagFlowLayout.adapter = object : TagAdapter(childNames) {
-                override fun getView(parent: FlowLayout, position: Int, content: String): View {
-                    val textView = LayoutInflater.from(context).inflate(R.layout.item_sliding, tagFlowLayout, false) as TextView
-                    textView.text = content
+            tagFlowLayout.adapter = object : TagAdapter<SystemType.Children>(it.children) {
+                override fun getView(parent: FlowLayout, position: Int, item: SystemType.Children): View {
+                    val textView = LayoutInflater.from(context).inflate(R.layout.item_tag_flow, tagFlowLayout, false) as TextView
+                    textView.text = item.name
                     return textView
                 }
             }

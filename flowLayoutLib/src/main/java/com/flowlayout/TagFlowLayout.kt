@@ -11,12 +11,12 @@ import android.view.View.OnClickListener
 import com.flowlayout.TagAdapter.OnDataChangedListener
 import java.util.*
 
-class TagFlowLayout @JvmOverloads constructor(
+class TagFlowLayout<T> @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyle: Int = 0
 ) : FlowLayout(context, attrs, defStyle), OnDataChangedListener {
-    private lateinit var mTagAdapter: TagAdapter
+    private lateinit var mTagAdapter: TagAdapter<T>
     private var mSelectedMax = -1 //-1为不限制数量
     private val mSelectedView: MutableSet<Int> = HashSet()
     private var mOnSelectListener: OnSelectListener? = null
@@ -56,51 +56,41 @@ class TagFlowLayout @JvmOverloads constructor(
         removeAllViews()
         val adapter = mTagAdapter
         var tagViewContainer: TagView? = null
-        for (i in 0 until adapter!!.count) {
+        for (i in 0 until adapter.count) {
             val tagView = adapter.getView(this, i, adapter.getItem(i))
             tagViewContainer = TagView(context)
-            tagView!!.isDuplicateParentStateEnabled = true
+            tagView.isDuplicateParentStateEnabled = true
             if (tagView.layoutParams != null) {
                 tagViewContainer.layoutParams = tagView.layoutParams
             } else {
-                val lp = MarginLayoutParams(
-                    LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT
-                )
+                val lp = MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
                 lp.setMargins(
                     dip2px(context, 5f),
                     dip2px(context, 5f),
                     dip2px(context, 5f),
                     dip2px(context, 5f)
                 )
-                tagViewContainer.setLayoutParams(lp)
+                tagViewContainer.layoutParams = lp
             }
-            val lp =
-                LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
+            val lp = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
             tagView.layoutParams = lp
             tagViewContainer.addView(tagView)
             addView(tagViewContainer)
-            if (mTagAdapter!!.setSelected(i, adapter.getItem(i))) {
+            if (mTagAdapter.setSelected(i, adapter.getItem(i))) {
                 setChildChecked(i, tagViewContainer)
             }
             tagView.isClickable = false
             val finalTagViewContainer: TagView = tagViewContainer
             tagViewContainer.setOnClickListener(OnClickListener {
                 doSelect(finalTagViewContainer, i)
-                mOnTagClickListener?.onTagClick(
-                    finalTagViewContainer, i,
-                    this@TagFlowLayout
-                )
+                mOnTagClickListener?.onTagClick(finalTagViewContainer, i, this@TagFlowLayout)
             })
         }
     }
 
     fun setMaxSelectCount(count: Int) {
         if (mSelectedView.size > count) {
-            Log.w(
-                TAG,
-                "you has already select more than $count views , so it will be clear ."
-            )
+            Log.w(TAG, "you has already select more than $count views , so it will be clear .")
             mSelectedView.clear()
         }
         mSelectedMax = count
@@ -111,12 +101,12 @@ class TagFlowLayout @JvmOverloads constructor(
 
     private fun setChildChecked(position: Int, view: TagView) {
         view.isChecked = true
-        mTagAdapter!!.onSelected(position, view.tagView)
+        mTagAdapter.onSelected(position, view.tagView)
     }
 
     private fun setChildUnChecked(position: Int, view: TagView) {
         view.isChecked = false
-        mTagAdapter!!.unSelected(position, view.tagView)
+        mTagAdapter.unSelected(position, view.tagView)
     }
 
     private fun doSelect(child: TagView, position: Int) {
@@ -143,7 +133,7 @@ class TagFlowLayout @JvmOverloads constructor(
         mOnSelectListener?.onSelected(HashSet(mSelectedView))
     }
 
-    var adapter: TagAdapter
+    var adapter: TagAdapter<T>
         get() = mTagAdapter
         set(adapter) {
             mTagAdapter = adapter
@@ -168,20 +158,17 @@ class TagFlowLayout @JvmOverloads constructor(
 
     override fun onRestoreInstanceState(state: Parcelable) {
         if (state is Bundle) {
-            val bundle = state
-            val mSelectPos = bundle.getString(KEY_CHOOSE_POS)
+            val mSelectPos = state.getString(KEY_CHOOSE_POS)
             if (!TextUtils.isEmpty(mSelectPos)) {
                 val split = mSelectPos!!.split("\\|").toTypedArray()
                 for (pos in split) {
                     val index = pos.toInt()
                     mSelectedView.add(index)
                     val tagView: TagView = getChildAt(index) as TagView
-                    if (tagView != null) {
-                        setChildChecked(index, tagView)
-                    }
+                    setChildChecked(index, tagView)
                 }
             }
-            super.onRestoreInstanceState(bundle.getParcelable(KEY_DEFAULT))
+            super.onRestoreInstanceState(state.getParcelable(KEY_DEFAULT))
             return
         }
         super.onRestoreInstanceState(state)

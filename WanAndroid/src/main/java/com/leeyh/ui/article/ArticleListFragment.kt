@@ -1,5 +1,6 @@
 package com.leeyh.ui.article
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,6 +10,7 @@ import com.blankj.utilcode.util.SizeUtils
 import com.blankj.utilcode.util.StringUtils
 import com.core.SpaceItemDecoration
 import com.core.base.BaseVMFragment
+import com.core.ui.BrowserActivity
 import com.leeyh.R
 import com.leeyh.model.bean.ArticleList
 import kotlinx.android.synthetic.main.article_list_fragment.*
@@ -71,11 +73,6 @@ class ArticleListFragment : BaseVMFragment<ArticleListViewModel>() {
 
     private fun initAdapter() {
         articleAdapter = ArticleAdapter(R.layout.item_home, viewModel.articleList.value?.datas)
-        articleAdapter.run {
-            setOnItemClickListener { _, _, position ->
-                LogUtils.d("点击了${position}")
-            }
-        }
         articleRv.adapter = articleAdapter
     }
 
