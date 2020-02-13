@@ -22,7 +22,7 @@ class ArticleAdapter(layoutId: Int, data: List<Article>?) : BaseQuickAdapter<Art
                 else "${it.shareUser}   ${it.niceShareDate} "
             )
             helper.itemView.setOnClickListener { view ->
-                ARouter.getInstance().build(RouterPath.Browser).withString("url", it.link).navigation()
+                ARouter.getInstance().build(RouterPath.Browser).withString("url", "https://wanandroid.com/user/611/articles/1").navigation()
             }
         }
     }
