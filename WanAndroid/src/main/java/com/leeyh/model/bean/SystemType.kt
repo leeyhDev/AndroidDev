@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 
 data class SystemType(
     @SerializedName("children")
-    val children: List<SystemChildren>,
+    val children: List<SystemChild>,
     @SerializedName("courseId")
     val courseId: Int,
     @SerializedName("id")
@@ -21,9 +21,41 @@ data class SystemType(
     val userControlSetTop: Boolean,
     @SerializedName("visible")
     val visible: Int
-)
+) : Parcelable {
+    constructor(source: Parcel) : this(
+        source.createTypedArrayList(SystemChild.CREATOR)!!,
+        source.readInt(),
+        source.readInt(),
+        source.readString().toString(),
+        source.readInt(),
+        source.readInt(),
+        1 == source.readInt(),
+        source.readInt()
+    )
 
-data class SystemChildren(
+    override fun describeContents() = 0
+
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeTypedList(children)
+        writeInt(courseId)
+        writeInt(id)
+        writeString(name)
+        writeInt(order)
+        writeInt(parentChapterId)
+        writeInt((if (userControlSetTop) 1 else 0))
+        writeInt(visible)
+    }
+
+    companion object {
+        @JvmField
+        val CREATOR: Parcelable.Creator<SystemType> = object : Parcelable.Creator<SystemType> {
+            override fun createFromParcel(source: Parcel): SystemType = SystemType(source)
+            override fun newArray(size: Int): Array<SystemType?> = arrayOfNulls(size)
+        }
+    }
+}
+
+data class SystemChild(
     @SerializedName("courseId")
     val courseId: Int,
     @SerializedName("id")
@@ -63,9 +95,9 @@ data class SystemChildren(
 
     companion object {
         @JvmField
-        val CREATOR: Parcelable.Creator<SystemChildren> = object : Parcelable.Creator<SystemChildren> {
-            override fun createFromParcel(source: Parcel): SystemChildren = SystemChildren(source)
-            override fun newArray(size: Int): Array<SystemChildren?> = arrayOfNulls(size)
+        val CREATOR: Parcelable.Creator<SystemChild> = object : Parcelable.Creator<SystemChild> {
+            override fun createFromParcel(source: Parcel): SystemChild = SystemChild(source)
+            override fun newArray(size: Int): Array<SystemChild?> = arrayOfNulls(size)
         }
     }
 }

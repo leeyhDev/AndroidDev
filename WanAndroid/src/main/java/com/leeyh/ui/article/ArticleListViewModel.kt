@@ -37,4 +37,17 @@ class ArticleListViewModel : BaseViewModel() {
             }
         }
     }
+
+    fun getArticleSystemList(cid: Int, page: Int) {
+        launch {
+            val result = withContext(Dispatchers.IO) {
+                repository.getArticleSystemList(page, cid)
+            }
+             if (result.errorCode == 0) {
+                 articleList.value = result.data
+             } else {
+                 LogUtils.d(result.errorMsg)
+             }
+        }
+    }
 }

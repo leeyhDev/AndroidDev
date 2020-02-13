@@ -44,7 +44,6 @@ android {
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     api project(path: ':core')
-    api project(path: ':tabLayoutLib')
     api project(path: ':flowLayoutLib')
 
     kapt 'com.alibaba:arouter-compiler:1.2.2'//路由注解

@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import com.blankj.utilcode.util.LogUtils
 import com.core.base.BaseFragment
+import com.core.constant.ParamValue
 import com.leeyh.R
 import com.leeyh.model.repository.ArticleRepository
 import kotlinx.android.synthetic.main.article_fragment.*
@@ -23,10 +24,10 @@ class ArticleFragment : BaseFragment() {
     }
 
     override fun initData() {
-        titleArray.add("首页")
+        titleArray.add("最新")
         titleArray.add("广场")
-        articleFragments.add(ArticleListFragment.newInstance("article", 0))
-        articleFragments.add(ArticleListFragment.newInstance("user_article", 0))
+        articleFragments.add(ArticleListFragment.newInstance(ParamValue.ARTICLE_NEW))
+        articleFragments.add(ArticleListFragment.newInstance(ParamValue.ARTICLE_USER))
         launch {
             val result = withContext(Dispatchers.IO) {
                 ArticleRepository().getWxArticleChapters()
@@ -34,15 +35,14 @@ class ArticleFragment : BaseFragment() {
             if (result.errorCode == 0) {
                 result.data.forEach {
                     titleArray.add(it.name)
-                    articleFragments.add(ArticleListFragment.newInstance("", it.id))
+                    articleFragments.add(ArticleListFragment.newInstance(ParamValue.ARTICLE_WX, it.id))
                 }
                 viewPager.adapter = object : FragmentPagerAdapter(childFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
                     override fun getItem(position: Int) = articleFragments[position]
                     override fun getCount() = titleArray.size
                     override fun getPageTitle(position: Int) = titleArray[position]
                 }
-                tabLayout.setupWithViewPager(viewPager)
-                LogUtils.d(titleArray.toString())
+                tabLayout.setViewPager(viewPager)
             } else {
                 LogUtils.d(result.errorMsg)
             }

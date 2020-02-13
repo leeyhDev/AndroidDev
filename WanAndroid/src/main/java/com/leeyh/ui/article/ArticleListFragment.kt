@@ -1,16 +1,13 @@
 package com.leeyh.ui.article
 
-import android.app.Activity
 import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.blankj.utilcode.util.ColorUtils
-import com.blankj.utilcode.util.LogUtils
-import com.blankj.utilcode.util.SizeUtils
 import com.blankj.utilcode.util.StringUtils
-import com.core.SpaceItemDecoration
 import com.core.base.BaseVMFragment
-import com.core.ui.BrowserActivity
+import com.core.constant.ParamKey
+import com.core.constant.ParamValue
 import com.leeyh.R
 import com.leeyh.model.bean.ArticleList
 import kotlinx.android.synthetic.main.article_list_fragment.*
@@ -19,17 +16,15 @@ class ArticleListFragment : BaseVMFragment<ArticleListViewModel>() {
     override fun providerVMClass(): Class<ArticleListViewModel>? = ArticleListViewModel::class.java
     private lateinit var articleAdapter: ArticleAdapter
     private var currentPage = 0
-    private lateinit var articlePath: String
-    private var articleId = 408
+    private lateinit var articleType: String
+    private var articleCid = 0
 
     companion object {
-        const val ARTICLE_PATH = "articlePath"
-        const val WX_ARTICLE_ID = "wxArticleId"
-        fun newInstance(type: String, id: Int) =
+        fun newInstance(path: String = ParamValue.ARTICLE_NEW, cid: Int = 0) =
             ArticleListFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARTICLE_PATH, type)
-                    putInt(WX_ARTICLE_ID, id)
+                    putString(ParamKey.ARTICLE_TYPE, path)
+                    putInt(ParamKey.ARTICLE_CID, cid)
                 }
             }
     }
@@ -39,7 +34,6 @@ class ArticleListFragment : BaseVMFragment<ArticleListViewModel>() {
     override fun initView() {
         articleRv.run {
             layoutManager = LinearLayoutManager(context)
-            addItemDecoration(SpaceItemDecoration(SizeUtils.dp2px(12f)))
         }
         initAdapter()
         initRefreshLayout()
@@ -48,8 +42,8 @@ class ArticleListFragment : BaseVMFragment<ArticleListViewModel>() {
 
     override fun initData() {
         arguments?.let { bundle ->
-            articlePath = bundle.getString(ARTICLE_PATH, "article")
-            articleId = bundle.getInt(WX_ARTICLE_ID, 408)
+            articleType = bundle.getString(ParamKey.ARTICLE_TYPE, ParamValue.ARTICLE_NEW)
+            articleCid = bundle.getInt(ParamKey.ARTICLE_CID)
             refresh()
         }
     }
@@ -79,20 +73,31 @@ class ArticleListFragment : BaseVMFragment<ArticleListViewModel>() {
     private fun refresh() {
         articleAdapter.loadMoreModule?.isEnableLoadMore = false
         swipeRefreshLayout.isRefreshing = true
-        if (StringUtils.isEmpty(articlePath)) {
-            currentPage = 1
-            viewModel.getWxArticleList(articleId, currentPage)
-        } else {
-            currentPage = 0
-            viewModel.getArticleList(articlePath, currentPage)
+        when (articleType) {
+            ParamValue.ARTICLE_NEW -> {
+                currentPage = 0
+                viewModel.getArticleList("article", currentPage)
+            }
+            ParamValue.ARTICLE_USER -> {
+                currentPage = 0
+                viewModel.getArticleList("user_article", currentPage)
+            }
+            ParamValue.ARTICLE_WX -> {
+                currentPage = 1
+                viewModel.getWxArticleList(articleCid, currentPage)
+            }
+            ParamValue.ARTICLE_SYSTEM -> {
+                currentPage = 0
+                viewModel.getArticleSystemList(articleCid, currentPage)
+            }
         }
     }
 
     private fun loadMore() {
-        if (StringUtils.isEmpty(articlePath)) {
-            viewModel.getWxArticleList(articleId, currentPage)
+        if (StringUtils.isEmpty(articleType)) {
+            viewModel.getWxArticleList(articleCid, currentPage)
         } else {
-            viewModel.getArticleList(articlePath, currentPage)
+            viewModel.getArticleList(articleType, currentPage)
         }
     }
 
