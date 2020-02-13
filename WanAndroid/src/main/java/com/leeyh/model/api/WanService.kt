@@ -1,11 +1,9 @@
 package com.leeyh.model.api
 
-import com.leeyh.model.bean.ArticleList
-import com.leeyh.model.bean.SystemType
-import com.leeyh.model.bean.WanData
-import com.leeyh.model.bean.WxArticleChapter
+import com.leeyh.model.bean.*
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface WanService {
 
@@ -25,63 +23,63 @@ interface WanService {
     @GET("/tree/json")
     suspend fun getSystem(): WanData<List<SystemType>>
 
+
+    @GET("/article/list/{page}/json")
+    suspend fun getSystemList(@Path("page") page: Int, @Query("cid") cid: Int): WanData<List<Article>>
     /*
-     @GET("/article/list/{page}/json")
-     suspend fun getSystemTypeDetail(@Path("page") page: Int, @Query("cid") cid: Int): WanBaseData<ArticleList>
+        @GET("/navi/json")
+        suspend fun getNavigation(): WanBaseData<List<Navigation>>
 
-     @GET("/navi/json")
-     suspend fun getNavigation(): WanBaseData<List<Navigation>>
+        @GET("/project/tree/json")
+        suspend fun getProjectType(): WanBaseData<List<SystemParent>>
 
-     @GET("/project/tree/json")
-     suspend fun getProjectType(): WanBaseData<List<SystemParent>>
+        @GET("/wxarticle/chapters/json")
+        suspend fun getBlogType(): WanBaseData<List<SystemParent>>
 
-     @GET("/wxarticle/chapters/json")
-     suspend fun getBlogType(): WanBaseData<List<SystemParent>>
+        @GET("/wxarticle/list/{id}/{page}/json")
+        fun getBlogArticle(@Path("id") id: Int, @Path("page") page: Int): WanBaseData<ArticleList>
 
-     @GET("/wxarticle/list/{id}/{page}/json")
-     fun getBlogArticle(@Path("id") id: Int, @Path("page") page: Int): WanBaseData<ArticleList>
+        @GET("/project/list/{page}/json")
+        suspend fun getProjectTypeDetail(@Path("page") page: Int, @Query("cid") cid: Int): WanBaseData<ArticleList>
 
-     @GET("/project/list/{page}/json")
-     suspend fun getProjectTypeDetail(@Path("page") page: Int, @Query("cid") cid: Int): WanBaseData<ArticleList>
+        @GET("/article/listproject/{page}/json")
+        suspend fun getLastedProject(@Path("page") page: Int): WanBaseData<ArticleList>
 
-     @GET("/article/listproject/{page}/json")
-     suspend fun getLastedProject(@Path("page") page: Int): WanBaseData<ArticleList>
+        @GET("/friend/json")
+        suspend fun getWebsites(): WanBaseData<List<Hot>>
 
-     @GET("/friend/json")
-     suspend fun getWebsites(): WanBaseData<List<Hot>>
+        @GET("/hotkey/json")
+        suspend fun getHot(): WanBaseData<List<Hot>>
 
-     @GET("/hotkey/json")
-     suspend fun getHot(): WanBaseData<List<Hot>>
+        @FormUrlEncoded
+        @POST("/article/query/{page}/json")
+        suspend fun searchHot(@Path("page") page: Int, @Field("k") key: String): WanBaseData<ArticleList>
 
-     @FormUrlEncoded
-     @POST("/article/query/{page}/json")
-     suspend fun searchHot(@Path("page") page: Int, @Field("k") key: String): WanBaseData<ArticleList>
+        @FormUrlEncoded
+        @POST("/user/login")
+        suspend fun login(@Field("username") userName: String, @Field("password") passWord: String): WanBaseData<User>
 
-     @FormUrlEncoded
-     @POST("/user/login")
-     suspend fun login(@Field("username") userName: String, @Field("password") passWord: String): WanBaseData<User>
+        @GET("/user/logout/json")
+        suspend fun logOut(): WanBaseData<Any>
 
-     @GET("/user/logout/json")
-     suspend fun logOut(): WanBaseData<Any>
+        @FormUrlEncoded
+        @POST("/user/register")
+        suspend fun register(@Field("username") userName: String, @Field("password") passWord: String, @Field("repassword") rePassWord: String): WanBaseData<User>
 
-     @FormUrlEncoded
-     @POST("/user/register")
-     suspend fun register(@Field("username") userName: String, @Field("password") passWord: String, @Field("repassword") rePassWord: String): WanBaseData<User>
+        @GET("/lg/collect/list/{page}/json")
+        suspend fun getCollectArticles(@Path("page") page: Int): WanBaseData<ArticleList>
 
-     @GET("/lg/collect/list/{page}/json")
-     suspend fun getCollectArticles(@Path("page") page: Int): WanBaseData<ArticleList>
+        @POST("/lg/collect/{id}/json")
+        suspend fun collectArticle(@Path("id") id: Int): WanBaseData<ArticleList>
 
-     @POST("/lg/collect/{id}/json")
-     suspend fun collectArticle(@Path("id") id: Int): WanBaseData<ArticleList>
+        @POST("/lg/uncollect_originId/{id}/json")
+        suspend fun cancelCollectArticle(@Path("id") id: Int): WanBaseData<ArticleList>
 
-     @POST("/lg/uncollect_originId/{id}/json")
-     suspend fun cancelCollectArticle(@Path("id") id: Int): WanBaseData<ArticleList>
+        @GET("/user_article/list/{page}/json")
+        suspend fun getSquareArticleList(@Path("page") page: Int): WanBaseData<ArticleList>
 
-     @GET("/user_article/list/{page}/json")
-     suspend fun getSquareArticleList(@Path("page") page: Int): WanBaseData<ArticleList>
-
-     @FormUrlEncoded
-     @POST("/lg/user_article/add/json")
-     suspend fun shareArticle(@Field("title") title: String, @Field("link") url: String): WanBaseData<String>*/
+        @FormUrlEncoded
+        @POST("/lg/user_article/add/json")
+        suspend fun shareArticle(@Field("title") title: String, @Field("link") url: String): WanBaseData<String>*/
 
 }
