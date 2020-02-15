@@ -24,15 +24,16 @@
     </style>
 
     <style name="SlidingTabLayoutStyle">
-        <item name="android:layout_height">40dp</item>
-        <item name="tl_indicator_color">@color/colorPrimary</item>
-        <item name="tl_indicator_height">2dp</item>
-        <item name="tl_tab_padding">14dp</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="tl_indicator_color">@android:color/white</item>
+        <item name="tl_indicator_height">4dp</item>
+        <item name="tl_tab_padding">@dimen/comm_view_margin_small</item>
         <item name="tl_tab_space_equal">false</item>
         <item name="tl_textBold">SELECT</item>
-        <item name="tl_textSelectColor">@color/colorTextTitle</item>
-        <item name="tl_textUnselectColor">@color/colorTextHint</item>
-        <item name="tl_textsize">@dimen/text_middle</item>
+        <item name="tl_textSelectColor">@android:color/white</item>
+        <item name="tl_textUnselectColor">@color/colorWhite70</item>
+        <item name="tl_textsize">@dimen/text_normal</item>
         <item name="tl_underline_height">0dp</item>
     </style>
 
