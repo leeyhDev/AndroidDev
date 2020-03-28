@@ -44,18 +44,21 @@ dependencies {
     api files('libs/tbs_sdk_thirdapp_v4.3.0.1148_43697_20190805_175505.jar')
     api project(path: ':tabLayoutLib')
 
+    //base
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api 'androidx.multidex:multidex:2.0.1'//分包
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0'  //协程
     api 'androidx.core:core-ktx:1.2.0'
     api 'androidx.appcompat:appcompat:1.1.0'
-    api 'com.google.android.material:material:1.2.0-alpha04'
+    api 'com.google.android.material:material:1.1.0'
+    //base view
     api 'androidx.recyclerview:recyclerview:1.1.0'
     api 'androidx.constraintlayout:constraintlayout:1.1.3'
-    //协程
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0'
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0'
-    //viewModel
+    //lifecycle
     api 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     api 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+
+    //retrofit2
     api 'com.squareup.retrofit2:retrofit:2.6.2'
     api 'com.squareup.retrofit2:converter-gson:2.6.2'
     api 'com.squareup.okhttp3:logging-interceptor:4.2.0'
@@ -71,6 +74,4 @@ dependencies {
     api 'com.alibaba:arouter-api:1.5.0'
     kapt 'com.alibaba:arouter-compiler:1.2.2'
 
-    //分包
-    api 'androidx.multidex:multidex:2.0.1'
 }

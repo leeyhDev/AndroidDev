@@ -1,2 +1,2 @@
 include ':note', ':core', ':WanAndroid',"tabLayoutLib","flowLayoutLib"
-rootProject.name='AndroidNotebook'
+rootProject.name='AndroidDev'
