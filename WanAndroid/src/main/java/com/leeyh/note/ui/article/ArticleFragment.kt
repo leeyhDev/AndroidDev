@@ -1,4 +1,4 @@
-package com.leeyh.ui.article
+package com.leeyh.note.ui.article
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter

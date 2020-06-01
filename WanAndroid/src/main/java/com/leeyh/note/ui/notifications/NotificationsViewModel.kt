@@ -1,4 +1,4 @@
-package com.leeyh.ui.notifications
+package com.leeyh.note.ui.notifications
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

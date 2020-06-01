@@ -1,11 +1,13 @@
 package com.leeyh
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
-import com.leeyh.ui.article.ArticleFragment
-import com.leeyh.ui.system.SystemFragment
+import com.blankj.utilcode.util.BarUtils
+import com.leeyh.note.ui.article.ArticleFragment
+import com.leeyh.note.ui.system.SystemFragment
 import com.tablayout.bean.CustomTabEntity
 import com.tablayout.listener.OnTabSelectListener
 import kotlinx.android.synthetic.main.wan_android_main_activity.*
@@ -14,6 +16,8 @@ class WanAndroidMainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        BarUtils.setStatusBarColor(this, Color.TRANSPARENT)
+        BarUtils.setStatusBarLightMode(this,true)
         setContentView(R.layout.wan_android_main_activity)
         val tabEntities = arrayListOf(
             CustomTabEntity("首页", R.mipmap.home, R.mipmap.home_pre),

@@ -1,4 +1,4 @@
-package com.leeyh.ui.system
+package com.leeyh.note.ui.system
 
 import android.view.LayoutInflater
 import android.view.View

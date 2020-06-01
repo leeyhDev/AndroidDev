@@ -1,4 +1,4 @@
-package com.leeyh.ui.article
+package com.leeyh.note.ui.article
 
 import android.os.Bundle
 import androidx.lifecycle.Observer

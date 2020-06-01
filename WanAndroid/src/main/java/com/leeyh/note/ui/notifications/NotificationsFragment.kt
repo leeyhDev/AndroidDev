@@ -1,4 +1,4 @@
-package com.leeyh.ui.notifications
+package com.leeyh.note.ui.notifications
 
 import android.os.Bundle
 import android.view.LayoutInflater

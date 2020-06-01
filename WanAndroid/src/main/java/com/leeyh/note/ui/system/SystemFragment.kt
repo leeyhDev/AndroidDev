@@ -1,4 +1,4 @@
-package com.leeyh.ui.system
+package com.leeyh.note.ui.system
 
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager

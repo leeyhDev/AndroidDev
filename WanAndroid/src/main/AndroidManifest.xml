@@ -21,7 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.system.SystemListActivity" />
+        <activity android:name="com.leeyh.note.ui.system.SystemListActivity" />
     </application>
 
 </manifest>

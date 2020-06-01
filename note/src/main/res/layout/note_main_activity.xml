@@ -20,7 +20,6 @@
         android:id="@+id/commonTabLayout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:tl_iconGravity="TOP"
         app:tl_iconHeight="22dp"

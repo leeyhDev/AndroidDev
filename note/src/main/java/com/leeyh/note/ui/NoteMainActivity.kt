@@ -1,14 +1,14 @@
-package com.leeyh.ui
+package com.leeyh.note.ui
 
 import android.os.Bundle
+import android.view.ViewOutlineProvider
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.blankj.utilcode.util.BarUtils
-import com.leeyh.R
-import com.leeyh.ui.article.ArticleFragment
-import com.leeyh.ui.note.NoteFragment
-import com.leeyh.ui.system.SystemFragment
+import com.leeyh.note.R
+import com.leeyh.note.ui.article.ArticleFragment
+import com.leeyh.note.ui.system.SystemFragment
 import com.tablayout.bean.CustomTabEntity
 import com.tablayout.listener.OnTabSelectListener
 import kotlinx.android.synthetic.main.note_main_activity.*
@@ -25,9 +25,16 @@ class NoteMainActivity : AppCompatActivity() {
             CustomTabEntity("笔记", R.drawable.ic_note_selected, R.drawable.ic_note_normal),
             CustomTabEntity("我的", R.drawable.ic_me_selected, R.drawable.ic_me_normal)
         )
-        val fragments = arrayOf(ArticleFragment(), SystemFragment(), NoteFragment(), NoteFragment())
+        val fragments = arrayOf(
+            ArticleFragment(),
+            SystemFragment(),
+            NoteFragment(),
+            NoteFragment()
+        )
         commonTabLayout.setTabData(tabEntities)
-        viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+        commonTabLayout.outlineProvider = ViewOutlineProvider.BOUNDS
+        viewPager.adapter = object :
+            FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
             override fun getItem(position: Int) = fragments[position]
             override fun getCount() = fragments.size
             override fun getPageTitle(position: Int) = tabEntities[position].tabTitle
@@ -41,7 +48,13 @@ class NoteMainActivity : AppCompatActivity() {
         })
         viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrollStateChanged(state: Int) {}
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+            }
+
             override fun onPageSelected(position: Int) {
                 commonTabLayout.currentTab = position
             }

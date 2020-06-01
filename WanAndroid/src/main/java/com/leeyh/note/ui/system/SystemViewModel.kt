@@ -1,4 +1,4 @@
-package com.leeyh.ui.system
+package com.leeyh.note.ui.system
 
 import androidx.lifecycle.MutableLiveData
 import com.blankj.utilcode.util.LogUtils

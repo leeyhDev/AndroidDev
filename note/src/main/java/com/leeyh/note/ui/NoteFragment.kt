@@ -1,9 +1,9 @@
-package com.leeyh.ui.note
+package com.leeyh.note.ui
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import com.core.base.BaseFragment
-import com.leeyh.R
+import com.leeyh.note.R
 import kotlinx.android.synthetic.main.note_fragment.*
 
 class NoteFragment : BaseFragment() {
@@ -16,7 +16,11 @@ class NoteFragment : BaseFragment() {
         list?.let {
             val fragments = ArrayList<NoteListFragment>()
             it.forEach { title ->
-                fragments.add(NoteListFragment.newInstance("note/$title"))
+                fragments.add(
+                    NoteListFragment.newInstance(
+                        "note/$title"
+                    )
+                )
             }
             viewPager.offscreenPageLimit = it.size
             viewPager.adapter = object : FragmentPagerAdapter(childFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
