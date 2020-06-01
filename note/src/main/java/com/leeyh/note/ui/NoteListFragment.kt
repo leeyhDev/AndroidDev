@@ -1,9 +1,10 @@
-package com.leeyh.ui.note
+package com.leeyh.note.ui
 
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.core.base.BaseFragment
-import com.leeyh.R
+import com.leeyh.note.R
+import com.leeyh.note.adapter.NotetemAdapter
 import kotlinx.android.synthetic.main.note_fragment_item_list.*
 
 class NoteListFragment : BaseFragment() {
@@ -20,7 +21,8 @@ class NoteListFragment : BaseFragment() {
             val list = context?.assets?.list(type)
             list?.let {
                 recyclerView.layoutManager = LinearLayoutManager(context)
-                val notetemAdapter = NotetemAdapter(it.asList(), type)
+                val notetemAdapter =
+                    NotetemAdapter(it.asList(), type)
                 recyclerView.adapter = notetemAdapter
                 notetemAdapter.notifyDataSetChanged()
             }

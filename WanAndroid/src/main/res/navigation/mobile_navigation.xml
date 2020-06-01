@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.leeyh.ui.article.ArticleFragment"
+        android:name="com.leeyh.note.ui.article.ArticleFragment"
         android:label="@string/title_home"
         tools:layout="@layout/article_fragment" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.leeyh.ui.system.SystemFragment"
+        android:name="com.leeyh.note.ui.system.SystemFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/system_fragment" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.leeyh.ui.notifications.NotificationsFragment"
+        android:name="com.leeyh.note.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 </navigation>

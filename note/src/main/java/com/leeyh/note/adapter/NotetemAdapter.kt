@@ -1,4 +1,4 @@
-package com.leeyh.ui.note
+package com.leeyh.note.adapter
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.core.ui.BrowserActivity
-import com.leeyh.R
+import com.leeyh.note.R
 import kotlinx.android.synthetic.main.fragment_item.view.*
 
 class NotetemAdapter(private val notes: List<String>, private val type: String) : RecyclerView.Adapter<NotetemAdapter.ViewHolder>() {

@@ -1,4 +1,4 @@
-package com.leeyh.ui.system
+package com.leeyh.note.ui.system
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
@@ -9,7 +9,7 @@ import com.core.constant.ParamValue
 import com.core.constant.RouterPath
 import com.leeyh.R
 import com.leeyh.model.bean.SystemType
-import com.leeyh.ui.article.ArticleListFragment
+import com.leeyh.note.ui.article.ArticleListFragment
 import kotlinx.android.synthetic.main.system_list_activity.*
 
 @Route(path = RouterPath.SystemList)
