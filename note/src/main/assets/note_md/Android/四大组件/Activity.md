@@ -6,13 +6,13 @@ Activity这个组件提供了两大接口：**生命周期**和**启动模式**�
 
 这张图大家应该很熟悉了，这里我按使用场景来把它们分成三组：
 
-- onCreate和onDestroy
-- onStart、onRestart和onStop
-- onResume和onPause
+- **完整生存期**：onCreate和onDestroy
+- **可见生存期**：onStart和onStop
+- **前台生存期**：onResume和onPause
 
-第一组使用频率最高，在一个App里面我们会经常需要打开（startActivity）和关闭（finish）一个页面。onCreate是Activity生命周期里面的第一步，当我们进入到这一步时就表示一个Activity实例对象（从Java的角度看）已经产生了，当我们New了一个Java对象之后，首先要做的肯定是对其进行初始化了，那么onCreate就是Android提供给开发者用来对Activity实例对象中的成员做初始化的。Tips：Android为了方便对Activity组件的管理以及开发者使用，对Activity做了封装，开发者不能直接new一个Activity对象（你也可以直接new，但是new出来的对象不会被Android管理，也就失去了界面的展示和交互的功能，跟普通Java对象无异）.
+第一组使用频率最高，在一个App里面我们会经常需要打开（startActivity）和关闭（finish）一个页面。**onCreate** 是Activity生命周期里面的第一步，每个 Activity 中基本都会重写了这个方法， **它会在活动第一次被创建的时候调用**（只调用一次）。 你应该在这个方法中完成活动的**初始化操作**， 比如说**加载布局、添加View、给View填充数据、绑定事件**等。
 
-在onCreate里面一般我们会做View的初始化操作，比如添加View（setContentView，addView等）和View中数据的填充（setText，setImage等），那么问题来了：为什么对View的初始化要放在这里，可不可以放到其他地方（onStart或者onResume）？答案是肯定的，但是我们不建议这么做，因为放在onCreate里面可以保证初始化操作只做一次，而放到其他地方可能会调用多次，当然你可以添加一个flag来标记是否已经做过初始化，这样就可以保证放在onStart或者onResume里面也只做一次初始化，但是这样不觉得多此一举么？既然onCreate已经帮我们实现了这么一个功能，为啥不用呢，当然如果你有特殊需求，另当别论。
+> Tips：当我们进入到这一步时就表示一个 Activity 实例对象（从Java的角度看）已经产生了，当我们New了一个Java对象之后，首先要做的肯定是对其进行初始化了，那么 **onCreate** 就是Android 提供给开发者用来对 Activity 实例对象中的成员做初始化的。Android为了方便对Activity组件的管理以及开发者使用，对Activity做了封装，开发者不能直接new一个Activity对象（你也可以直接new，但是new出来的对象不会被Android管理，也就失去了界面的展示和交互的功能，跟普通Java对象无异）
 
 还有就是在onCreate里面有个savedInstanceState参数，这个主要用于你的Activity在非正常情况下被销毁前帮你自动保存的一些数据，这些数据会在这个Activity被重新创建时用到，因此Android将这个参数放在了onCreate里面。注意，我这里说的是非正常情况销毁Activity，这种场景比较多，比如系统内存不够用，系统语言改变，屏幕方向改变等，如果你不清楚哪些是非正常情况，没关系，只要清楚正常情况就行了，其他的自然就都可以认为是非正常场景下的Activity销毁行为。那么正常情况是什么？用户主动意愿想要销毁Activity就是正常情况，这种场景很少，就两种：调用finish和带特殊启动模式的startActivity方法。那么对于非正常情况下的onCreate我们在里面又该如何使用这个savedInstanceState？那么就要搞清楚savedInstanceState会保存到哪些数据，有两种：系统帮你自动保存的和你自己保存的。系统只会保存它认为有必要保存的（比方说EditText里面的内容，CheckBox的Check状态，Fragment实例等），但是很多童鞋不知道Activity会自动保存其中的Fragment实例，onCreate写成这样子：
 
