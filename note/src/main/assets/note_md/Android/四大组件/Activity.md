@@ -1,6 +1,10 @@
-# 基于使用场景解读Activity
+#  基于使用场景解读 Activity
 
-Activity这个组件提供了两大接口：**生命周期**和**启动模式**，下面这张图来自官网：
+Activity 作为四大组件之首，是使用最为频繁的一种组件，中文直接翻译为 “**活动**” ，如果翻译成 “**界面**” 就会更好理解。正常情况下，除了 **Window**、**Dialog **和 **Toast**，我们能见到的界面的确只有Activity。Activity这个组件提供了两大接口：**生命周期**和**启动模式**。
+
+## Activity 生命周期
+
+下面这张图来自官网：
 
 ![activity_lifecycle.png](https://gitee.com/leeyhDev/TyporaImages/raw/master/images/20200608103641-826962.png)
 
@@ -10,64 +14,33 @@ Activity这个组件提供了两大接口：**生命周期**和**启动模式**�
 - **可见生存期**：onStart和onStop
 - **前台生存期**：onResume和onPause
 
-第一组使用频率最高，在一个App里面我们会经常需要打开（startActivity）和关闭（finish）一个页面。**onCreate** 是Activity生命周期里面的第一步，每个 Activity 中基本都会重写了这个方法， **它会在活动第一次被创建的时候调用**（只调用一次）。 你应该在这个方法中完成活动的**初始化操作**， 比如说**加载布局、添加View、给View填充数据、绑定事件**等。
+第一组使用频率最高，在一个App里面我们会经常需要打开（startActivity）和关闭（finish）一个页面。
+
+### **onCreate**
+
+表示 Activity 正在被创建，这是生命周期的第一个方法。在这个方法中，我们可以做一些初始化工作，比如调用**setContentView** 去加载界面布局资源、初始化 Activity 所需数据等。
 
 > Tips：当我们进入到这一步时就表示一个 Activity 实例对象（从Java的角度看）已经产生了，当我们New了一个Java对象之后，首先要做的肯定是对其进行初始化了，那么 **onCreate** 就是Android 提供给开发者用来对 Activity 实例对象中的成员做初始化的。Android为了方便对Activity组件的管理以及开发者使用，对Activity做了封装，开发者不能直接new一个Activity对象（你也可以直接new，但是new出来的对象不会被Android管理，也就失去了界面的展示和交互的功能，跟普通Java对象无异）
 
-还有就是在onCreate里面有个savedInstanceState参数，这个主要用于你的Activity在非正常情况下被销毁前帮你自动保存的一些数据，这些数据会在这个Activity被重新创建时用到，因此Android将这个参数放在了onCreate里面。注意，我这里说的是非正常情况销毁Activity，这种场景比较多，比如系统内存不够用，系统语言改变，屏幕方向改变等，如果你不清楚哪些是非正常情况，没关系，只要清楚正常情况就行了，其他的自然就都可以认为是非正常场景下的Activity销毁行为。那么正常情况是什么？用户主动意愿想要销毁Activity就是正常情况，这种场景很少，就两种：调用finish和带特殊启动模式的startActivity方法。那么对于非正常情况下的onCreate我们在里面又该如何使用这个savedInstanceState？那么就要搞清楚savedInstanceState会保存到哪些数据，有两种：系统帮你自动保存的和你自己保存的。系统只会保存它认为有必要保存的（比方说EditText里面的内容，CheckBox的Check状态，Fragment实例等），但是很多童鞋不知道Activity会自动保存其中的Fragment实例，onCreate写成这样子：
-
-
-
-```css
-@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, FragmentBase.newInstance(this, "One", FragmentBase.class.getName()))
-                .add(R.id.container, FragmentFour.newInstance(this, "Two", FragmentFour.class.getName()))
-                .add(R.id.container, FragmentFive.newInstance(this, "Three", FragmentFive.class.getName()))
-                .commit();
-    }
-```
-
-这样会有个问题，当Activity在非正常情况下重启时，由于系统已经保存了FragmentBase，FragmentFour和FragmentFive三个Fragment实例，而你又重新添加了三个Fragment实例，结果导致Activity中存在了6个Fragment实例。截图如下：
-
-![img](https:////upload-images.jianshu.io/upload_images/694018-9455c84889c32af4.png?imageMogr2/auto-orient/strip|imageView2/2/w/831/format/webp)
-
-activitymanager查看到的结果
-
-这样不仅浪费内存资源还有可能会引发App行为异常。所以在了解了savedInstanceState的作用后正确的写法应该是这样的：
-
-
+**onCreate** 里面有个(Bundle **savedInstanceState**)参数，Activity在非正常情况下(**系统内存不够用**、**系统语言改变**，**屏幕方向改变**等)被销毁前自动保存的一些数据，这些数据会在这个 Activity 被重新创建时用到，因此 Android 将这个参数放在了 onCreate 里面。用户主动意愿想要销毁 Activity 就是正常情况，这种场景很少，就两种：调用 finish 和带特殊启动模式的 startActivity 方法。savedInstanceState 会保存两种数据：**系统自动保存**的和你自己保存的。系统只会保存它认为有必要保存的（比方说 EditText 里面的内容，CheckBox、RadioButton 的Check 状态，Fragment 实例等，控件中有 **onSaveInstanceState** 方法的）。
 
 ```kotlin
-@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main2)
         if (savedInstanceState != null) {
-            // 这里根据自己需要去从savedInstanceState中去数据
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(FragmentBase.class.getName());
-            if (fragment instanceof FragmentBase) {
-                FragmentBase base = (FragmentBase) fragment;
-                
-            }
+           // 此时说明 activity 是在异常情况下恢复
         } else {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, FragmentBase.newInstance(this, "One", FragmentBase.class.getName()))
-                    .add(R.id.container, FragmentFour.newInstance(this, "Two", FragmentFour.class.getName()))
-                    .add(R.id.container, FragmentFive.newInstance(this, "Three", FragmentFive.class.getName()))
-                    .commit();
-        } 
-    }
+           // 首次创建或者重新创建
+        }
+}
 ```
 
-再说说onDestroy，执行到这一步，一般代表activity即将要被销毁掉，不管是正常情况还是非正常情况关闭activity。一般在这里面我们会做一些资源的释放操作，以防止出现资源泄露或者依赖activity所引发的一些异常情况的发生。这里我举两个例子来说下上面说的两种情况：
+### **onDestroy**
 
-- 异步任务引发的资源泄露，比如handler或者thread。这种情况发生的原因主要是异步任务的生命周期与activity生命周期不同步造成的，以handler中的message为例：
+这个方法被调用后一般代表activity即将要被销毁掉，不管是正常情况还是非正常情况关闭 Activity。一般会在这里面做一些资源的释放操作、注销广播等，以防止出现资源泄露或者依赖 Activity 所引发的一些异常情况的发生。这里我举两个例子来说下上面说的两种情况：
 
-
+- 异步任务引发的资源泄露，比如 **handler** 或者 **thread**。这种情况发生的原因主要是异步任务的生命周期与activity生命周期不同步造成的，以handler中的message为例：
 
 ```java
 Handler handler =  new Handler();
@@ -82,8 +55,6 @@ handler.obtainMessage(1).sendToTarget();
 
 不管是使用哪种形式来发送message，message都会直接或者间接引用到当前所在的activity实例对象，如果在activity finish后，还有其相关的message在主线程的消息队列中，就会导致该activity实例对象无法被GC回收，引起内存泄露。所以一般我们需要在onDestroy阶段将handler所持有的message对象从主线程的消息队列中清除。示例如下：
 
-
-
 ```java
 @Override
 protected void onDestroy() {
@@ -96,8 +67,6 @@ protected void onDestroy() {
 
 - 异步任务引发的App运行异常，这里以一个显示Dialog的场景为例：
 
-
-
 ```java
 Handler handler =  new Handler();
 handler.postDelayed(new Runnable() {
@@ -109,8 +78,6 @@ handler.postDelayed(new Runnable() {
 ```
 
 由于我们设置的是5秒后显示一个dialog，当activity在5秒内被finish后可能会导致显示dialog时App发生崩溃。
-
-
 
 ```dart
 FATAL EXCEPTION: main
@@ -133,8 +100,6 @@ android.view.WindowManager$BadTokenException: Unable to add window -- token andr
 
 由于我们在activity的onDestroy中会销毁activity对应的窗体资源，所以在显示Dialog的时候由于dialog找不到父窗体就发生异常了。关于onDestroy中系统到底做了哪些资源清理的工作看下面的代码就清楚了：
 
-
-
 ```java
 final void performDestroy() {
     mDestroyed = true;
@@ -150,8 +115,6 @@ final void performDestroy() {
 
 所以在这种场景下正确的做法应该是这样的：
 
-
-
 ```java
 Handler handler =  new Handler();
 handler.postDelayed(new Runnable() {
@@ -166,8 +129,6 @@ handler.postDelayed(new Runnable() {
 
 isDestroyed方法要求最低api level是17，一般我们目前app支持的最低api level是14，所以你可以在activity中添加一个flag来标记当前activity的状态是否被destroyed，其实activity源码里面也是这么干的，依葫芦画瓢就行。
 
-
-
 ```java
 /**
  * Returns true if the final {@link #onDestroy()} call has been made
@@ -178,20 +139,15 @@ public boolean isDestroyed() {
 }
 ```
 
-### onStart、onRestart和onStop
+### onStart和onStop
 
-说实话这三个回调接口在实际使用场景中并不多，对onStart、onRestart和onStop的使用可以从是否可见这点来找到它的正确使用姿势。这里举几个常用的场景：
-
-- 对数据的时效性要求较高。以新闻类App为例：Activity A代表新闻列表，点击列表中的一个Item进入到Activity B新闻详情，在从B返回到A的时候为了保证用户能看到最新的新闻，就需要从服务器拉取最新的新闻列表数据并填充到Activity A，那么这个工作就可以放在onStart里面，当然你也可以放在onRestart里面，但是activity首次加载启动的时候不会调用onRestart，所以也就不会去拉取新闻列表数据。
-- 需要显示动画效果。有些activity需要显示一些动画来帮助提升用户体验，但是当我们从该页面进入到一个新页面时，由于该页面已经不可见了，所以就可以把当前页面中的动画给关掉以节省系统资源，而这个工作就可以放在onStop中进行。
+onStart 是从不可见进入到可见状态，onStop 是从可见进入到不可见状态。时间都极为短暂，不常用。
 
 ### onResume和onPause
 
-这两个接口使用的频率比上一组要高，对onResume和onPause的使用可以从可以从是否获得焦点（焦点即代表是是否可交互）这点来找到它的正确使用姿势，这里也举几个常见场景：
+onResume： 这个方法在活动准备好和用户进行交互的时候调用（取得焦点）。 **此时的活动一定位于返回栈的栈顶，并且处于运行状态。**
 
-- 结束占用CPU的动画或者其他正在运行任务，这种在使用地图SDK的时候比较常见：
-
-
+onPause：失去焦点，处于暂停状态。**我们通常会在这个方法中将一些及其消耗 CPU 的资源释放掉（比如显示地图或者大规模图形），以及保存一些关键数据（比如用户输入的数据等等），但这个方法的执行速度一定要快，不然会影响到新的栈顶活动的使用。**
 
 ```java
 @Override  
@@ -206,10 +162,45 @@ protected void onResume(){
 }  
 ```
 
+- 结束占用CPU的动画或者其他正在运行任务，这种在使用地图SDK的时候比较常见：
 - 视频播放，当视图组件获得焦点时，即onResume中播放视频，当视图组件失去焦点时，即onPause中暂停播放视频。
-- 保存重要数据，为了防止App被意外强杀，一般会在onPause中将一些重要数据保存到本地。
+- 保存重要数据，为了防止App被意外强杀，**一般会在 onPause 中将一些重要数据保存到本地**。
 
-其实一般情况下他们和onStart、onRestart和onStop这一组里面做的事情可以是一样的，也就是说放在onResume中执行的任务也可以放在onStop中去做，放在onPause中执行的任务也可以放到onStop中去做。不过他们之间还是有区别的：可见性和可交互性。我们需要根据具体的需求来分析哪些任务可以在视图可见或者不可见的时候做，哪些任务可以在焦点获得或者失去的时候去做。
+### onRestart
+
+表示 Activity **正在重新启动**。一般情况下，当当前Activity从不可见重新变为可见状态时，onRestart就会被调用。这种情形一般是用户行为所导致的，比如用户按Home键切换到桌面或者用户打开了一个新的Activity，这时当前的Activity就会暂停，也就是onPause和onStop被执行了，接着用户又回到了这个Activity，就会出现这种情况。
+
+### 常见流程
+
+1. 针对一个特定的 Activity，第一次启动，回调：**onCreate  ⇒  onStart  ⇒  onResume**
+
+2. 当用户打开新的 Activity 或者切换到桌面的时候，回调如下：**onPause  ⇒ onStop**，这里有一种特殊情况，如果新 Activity 采用了透明主题，那么当前 Activity 不会回调 onStop。
+
+3. 当用户再次回到原 Activity 时，回调：**onRestart  ⇒ onStart  ⇒  onResume**。
+
+4. 当用户按 back 键回退时，回调如下：**onPause  ⇒ onStop  ⇒  onDestroy**。
+
+5. 当 Activity 被系统回收后再次打开，生命周期方法回调过程和 1 一样，注意只是生命周期方法一样，不代表所有过程都一样，这个问题在下一节会详细说明。
+
+6. 从整个生命周期来说，onCreate 和 onDestroy 是配对的，分别标识着 Activity 的创建和销毁，并且只可能有一次调用。从 Activity 是否可见来说，onStart 和 onStop 是配对的，随着用户的操作或者设备屏幕的点亮和熄灭，这两个方法可能被调用多次；从 Activity 是否在前台来说，onResume 和 onPause 是配对的，随着用户操作或者设备屏幕的点亮和熄灭，这两个方法可能被调用多次。
+
+### 常见问题
+
+1. Activity 启动后按 home 键返回桌：**onPause ⇒ onStop**，重新返回：**onRestart ⇒ onStart ⇒ onResume**
+
+2. 设当前 Activity 为 A，如果这时用户打开一个新 Activity B，那么 B 的 onResume 和 A 的 onPause 哪个先执行呢？Activity启动之前，桟顶的Activity需要先onPause后，新Activity才能启动。流程为：**A onPause  ⇒  B onCreate  ⇒  onStart  ⇒  onResume ⇒ A onStop** 
+
+3. 资源相关的系统配置发生改变导致Activity被杀死并重新创建：**onPause  ⇒  onSaveInstanceState  ⇒  onStop  ⇒  onDestroy  ⇒  onCreate  ⇒  onStart  ⇒  onRestoreInstanceState  ⇒  onResume**，onSaveInstanceState 肯定出现在 onDestroy  之前，Android 9 之前为上述流程，Android 9 及之后的版本为 onStop 之后。
+
+4. 源内存不足导致低优先级的Activity被杀死：数据存储和恢复过程和情况 3 一样。Activity按照优先级从高到低，可以分为如下三种：
+
+   1.  **前台Activity**——正在和用户交互的Activity，优先级最高。
+   2. **可见但非前台Activity**——比如Activity中弹出了一个对话框，导致Activity可见但是位于后台无法和用户直接交互。
+   3. **后台Activity**——已经被暂停的Activity，比如执行了onStop，优先级最低。
+
+   当系统内存不足时，系统就会按照上述优先级去杀死目标 Activity 所在的进程，并在后续通过 **onSaveInstanceState** 和 **onRestoreInstanceState** 来存储和恢复数数据。如果一个进程中没有四大组件在执行，那么这个进程将很快被系统杀死，因此，一些后台工作不适合脱离四大组件而独自运行在后台中，这样进程很容易被杀死。比较好的方法是将后台工作放入 **Service** 中从而保证进程有一定的优先级，这样就不会轻易地被系统杀死。
+
+   系统配置中有很多内容，如果当某项内容发生改变后，我们不想系统重新创建 Activity，可以给 Activity 指定configChanges 属性，android:configChanges="locale | orientation | keyboardHidden"。
 
 ## Activity四种启动模式
 
@@ -222,15 +213,15 @@ protected void onResume(){
 
 ### Standard
 
-这种启动模式最常见，也是Activity的默认启动模式，每当我们需要开启一个新的Activity页面时系统都会新建一个Activity实例对象，然后开启上面说的Activity的生命周期流程之旅，onCreate->onStart->onResume。
+标准模式：这种启动模式最常见，也是 Activity 的默认启动模式。每当我们需要开启一个新的Activity页面时系统都会新建一个 Activity 实例对象，然后开启上面说的 Activity 的生命周期流程之旅，onCreate ⇒ onStart ⇒ onResume。在这种模式下，谁启动了这个 Activity，那么这个 Activity 就运行在启动它的那个 Activity 所在的栈中。
 
 ### SingleTop
 
-设置该模式后，当通过startActivity启动的Activity与当前Task 栈中最顶部的Activity一样时，系统不会重新创建一个Activity实例，而是进入一个特殊的方法onNewIntent，具体流程为：onNewIntent->onResume。这种场景还是比较多的，比方说商品详情页面一般都会有相关的商品推荐，点击推荐的某个商品后进入的还是一个商品详情页面，这个时候就不需要重新再创建一个新的商品详情Activity页面，直接复用已有的页面，刷新下View中的数据就好了。
+栈顶复用模式：设置该模式后，当启动的 Activity 与当前 Task  栈顶的 Activity 一样时，系统不会重新创建一个  Activity 实例，Activity 的 onCreate、onStart 不会被系统调用，而是进入一个特殊的方法 onNewIntent ，具体流程为：onNewIntent ⇒ onResume。如果新 Activity 的实例已存在但不是位于栈顶，那么新 Activity 仍然会重新重建。
 
 ### SingleTask
 
-设置该模式可以保证当前Task栈中每种Activity只会有一个实例存在，当通过startActivity启动Activity A时，如果当前Task栈中已经存在一个Activity A的实例，那么不再重新创建一个新的Activity实例，而是直接复用该实例，进入该Activity的onNewIntent方法，同时将位于Activity A实例之上的所有Activity弹出Task栈并销毁。这种场景在IM应用中使用的比较多，比如QQ或者微信的聊天页面，当从聊天页面进入其他页面，然后在重新进入聊天页面时就会直接进入原来的聊天页面，同时销毁中间新创建的Activity页面，并刷新聊天页面的数据。
+栈内复用模式：设置该模式可以保证当前 Task 栈中 Activity 只会有一个实例存在，当通过 startActivity 启动Activity A 时，如果当前 Task 栈中已经存在一个Activity A的实例，那么不再重新创建一个新的 Activity  实例，而是直接复用该实例，进入该 Activity 的 onNewIntent 方法，同时将位于 Activity A 实例之上的所有 Activity 弹出 Task 栈并销毁。
 
 ### SingleInstance
 
