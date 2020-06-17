@@ -12,13 +12,13 @@ class NoteFragment : BaseFragment() {
     }
 
     override fun initData() {
-        val list = context?.assets?.list("note")
+        val list = context?.assets?.list("note_md")
         list?.let {
             val fragments = ArrayList<NoteListFragment>()
             it.forEach { title ->
                 fragments.add(
                     NoteListFragment.newInstance(
-                        "note/$title"
+                        "note_md/$title"
                     )
                 )
             }

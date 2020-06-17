@@ -18,10 +18,10 @@ import com.leeyh.model.bean.SystemChild
 import com.leeyh.model.bean.SystemType
 
 class SystemAdapter(layoutId: Int, data: List<SystemType>?) : BaseQuickAdapter<SystemType, BaseViewHolder>(layoutId), LoadMoreModule {
-    override fun convert(helper: BaseViewHolder, item: SystemType?) {
-        item?.let {
-            helper.setText(R.id.nameTv, it.name)
-            val tagFlowLayout = helper.getView<TagFlowLayout<SystemChild>>(R.id.tagFlowLayout)
+    override fun convert(holder: BaseViewHolder, item: SystemType) {
+        item.let {
+            holder.setText(R.id.nameTv, it.name)
+            val tagFlowLayout = holder.getView<TagFlowLayout<SystemChild>>(R.id.tagFlowLayout)
             val childNames = ArrayList<String>()
             it.children.forEach { child ->
                 childNames.add(child.name)

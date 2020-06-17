@@ -1,25 +1,41 @@
 package com.leeyh.note.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.core.ui.BrowserActivity
 import com.leeyh.note.R
+import com.leeyh.note.ui.MarkdownActivity
+import kotlinx.android.synthetic.main.fragment_item.view.*
 
-class NoteAdapter(private val data: ArrayList<String>) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
+class NoteAdapter(private val notes: List<String>, private val type: String) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_note, parent, false))
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.fragment_item, parent, false)
+        return ViewHolder(view)
     }
-
-    override fun getItemCount(): Int = data.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.noteTitleTv.text = data[position]
+        val item = notes[position]
+        holder.title.text = item
+
+        with(holder.view) {
+            tag = item
+            setOnClickListener { v ->
+                    val intent = Intent(v.context, MarkdownActivity::class.java)
+                    intent.putExtra("markdownPath", "$type/$item")
+                    v.context.startActivity(intent)
+            }
+        }
     }
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val noteTitleTv: TextView = view.findViewById(R.id.mNoteTitleTv)
+    override fun getItemCount(): Int = notes.size
+
+    inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+        val title: TextView = view.title
     }
 }

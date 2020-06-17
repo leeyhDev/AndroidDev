@@ -1,2 +1,2 @@
-include ':note', ':core', ':WanAndroid',"tabLayoutLib","flowLayoutLib"
+include ':note', ':core', ':WanAndroid',"tabLayoutLib","flowLayoutLib","markdownLib"
 rootProject.name='AndroidDev'

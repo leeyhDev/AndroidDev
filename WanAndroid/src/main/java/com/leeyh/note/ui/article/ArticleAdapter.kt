@@ -12,16 +12,16 @@ import com.leeyh.model.bean.Article
 
 class ArticleAdapter(layoutId: Int, data: List<Article>?) : BaseQuickAdapter<Article, BaseViewHolder>(layoutId), LoadMoreModule {
 
-    override fun convert(helper: BaseViewHolder, item: Article?) {
-        item?.let {
-            helper.setText(R.id.titleTv, Html.fromHtml(it.title))
-            helper.setText(R.id.chapterTv, "${it.superChapterName}/${it.chapterName}")
-            helper.setText(
+    override fun convert(holder: BaseViewHolder, item: Article) {
+        item.let {
+            holder.setText(R.id.titleTv, Html.fromHtml(it.title))
+            holder.setText(R.id.chapterTv, "${it.superChapterName}/${it.chapterName}")
+            holder.setText(
                 R.id.shareTv,
                 if (StringUtils.isEmpty(it.shareUser)) it.niceShareDate
                 else "${it.shareUser}   ${it.niceShareDate} "
             )
-            helper.itemView.setOnClickListener { view ->
+            holder.itemView.setOnClickListener { view ->
                 ARouter.getInstance().build(RouterPath.Browser).withString("url", item.link).navigation()
             }
         }
