@@ -1,7 +1,5 @@
 package com.leeyh.algorithm;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class 计算字符个数 {
